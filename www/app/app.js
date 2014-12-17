@@ -16,7 +16,7 @@ function appConfig($stateProvider, $urlRouterProvider){
         .state('app', {
             url: '/app',
             abstract: true,
-            templateUrl: 'js/app.tpl.html'
+            templateUrl: 'app/app.tpl.html'
         });
 
     $urlRouterProvider.otherwise('/app/record');

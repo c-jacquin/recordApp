@@ -55,7 +55,10 @@ function recorder(Recorder,$ionicModal,Record,FileService,Toast){
     return {
         restrict: 'E',
         templateUrl: 'app/record/mediaCapture/recorder/recorder.tpl.html',
-        scope: {},
+        scope: {
+            onrecorded: '=',
+            onerror: '='
+        },
         link: function link(scope,element,attrs){
             var mediaElement = element.find('video')[0];
 
@@ -81,43 +84,15 @@ function recorder(Recorder,$ionicModal,Record,FileService,Toast){
             scope.stop = function(){
                 Recorder
                     .stop()
-                    .then(function(){
+                    .then(function(url){
+                        console.log(scope)
+                        scope.onrecorded(url);
                         scope.isRecording = false;
-                        $ionicModal.fromTemplateUrl('app/record/mediaCapture/recorder/recorder.tpl.html', {
-                            scope: scope,
-                            animation: 'slide-in-up'
-                        }).then(function(modal) {
-                            scope.modal = modal;
-                            scope.modal.show();
-                        });
-                    });
-            };
-
-            scope.cancel = function(){
-                scope.modal.hide();
-            };
-
-            scope.save = function(record){
-                Recorder.meta = record;
-                FileService
-                    .urlToBlob(Recorder.url)
-                    .then(FileService.blobToBase64)
-                    .then(Recorder.buildData)
-                    .then(Record.save)
-                    .then(function(data){
-                        scope.modal.hide();
-                        Toast.info('record saved !');
                     })
                     .catch(function(err){
-                        Toast.error(err.message);
+                        scope.onerror(err);
                     });
             };
-
-            scope.$on('$destroy', function() {
-                if(scope.modal){
-                    scope.modal.remove();
-                }
-            });
         }
     };
 }
