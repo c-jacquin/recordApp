@@ -1,0 +1,34 @@
+{
+    "launch_path": "/index.html",
+    "installs_allowed_from": [
+        "*"
+    ],
+    "version": "0.0.1",
+    "name": "recordApp",
+    "description": "An Ionic Framework and Cordova project.",
+    "developer": {
+        "name": "Ionic Framework Team",
+        "url": "http://ionicframework.com/"
+    },
+    "permissions": {
+      "audio-capture": {
+        "description": "Required to capture audio via getUserMedia"
+      },
+      "video-capture": {
+        "description": "Required to capture video via getUserMedia"
+      },
+      "device-storage:music": {
+        "description": "Required to listen recorded files"
+      },
+      "storage": {
+        "description": "Required to store data locally"
+      },
+      "desktop-notification": {
+        "description": "Required to notify the user"
+      }
+    },
+    "icons": {
+        "60": "/icon/icon-60.png",
+        "128": "/icon/icon-128.png"
+    }
+}
