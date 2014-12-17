@@ -2,13 +2,12 @@
     <div class="button-bar">
         <a class="button button-icon icon ion-skip-backward" ng-click="back()"></a>
         <a class="button button-icon icon" ng-class="{ 'ion-play' : isPaused, 'ion-pause' : !isPaused }" ng-click="play()"></a>
-        <!--<a class="button button-icon icon ion-pause" ng-click="pause()"></a>-->
         <a class="button button-icon icon" ng-class="{ 'ion-volume-low' : volume!=0, 'ion-volume-mute' : volume==0 }" ng-click="toggleSound()"></a>
         <div class="range">
             <input type="range" min="0" max="1" step="0.01" name="volume" ng-model="volume" ng-change="changeVolume()">
             <i class="button button-icon icon ion-volume-high" ng-click="volumeMax()"></i>
-            </div> 
-        </div> 
+        </div>
+    </div>
     <audio></audio>
     <video></video>
 </section>

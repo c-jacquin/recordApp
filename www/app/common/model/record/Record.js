@@ -1,3 +1,5 @@
+'use strict';
+
 function Record(pouchdb,$log){
     var recordsDB = pouchdb.create('Record');
         //sync = pouchdb.sync('Record', 'https://recorder.couchappy.com', {live: true});
@@ -38,8 +40,11 @@ function Record(pouchdb,$log){
         update: function(record){
             return recordsDB.put(record);
         },
-        remove: function(id){
-            return recordsDB.remove(id);
+        remove: function(record){
+            return recordsDB
+                .get(record.id)
+                .then(recordsDB.remove);
+            //return recordsDB.remove(record.id,record.value.rev);
         }
         //sync: sync
     };

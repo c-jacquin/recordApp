@@ -15,7 +15,7 @@
             <ion-item click-for-options ng-repeat="record in dashboard.records">
                 {{ record.id }}
                 <ion-delete-button class="ion-ios7-trash-outline"
-                                   ng-click="dashboard.remove(record.id)">
+                                   ng-click="dashboard.remove(record,$index)">
                 </ion-delete-button>
                 <ion-option-button class="button-royal"
                                    ng-click="edit(item)">
@@ -25,7 +25,7 @@
                                    ng-click="share(item)">
                     <i class="icon ion-ios7-play-outline royal"></i>
                 </ion-option-button>
-                <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
+                <ion-reorder-button class="ion-navicon" on-reorder="dashboard.moveItem(record, $fromIndex, $toIndex)"></ion-reorder-button>
             </ion-item>
         </ion-list>
     </ion-content>

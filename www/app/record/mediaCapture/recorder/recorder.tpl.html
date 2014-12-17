@@ -1,0 +1,13 @@
+<ion-scroll zooming="true" direction="y" style="width: 100%;">
+    <section class="list">
+        <ion-toggle ng-model="type.video" class="item" ng-change="change()" toggle-class="toggle-royal">
+            <i class="ion-ios7-videocam royal" ng-show="type.video"></i>
+            <i class="ion-ios7-mic royal" ng-show="!type.video"></i>
+        </ion-toggle>
+        <a class="button button-outline  ion-record button-royal item" ng-click="start()" ng-if="!isRecording" style="width:100%;"></a>
+        <a class="button button-outline ion-stop button-royal item" ng-click="stop()" ng-if="isRecording" style="width:100%;"></a>
+        <progress ng-if="isRecording"></progress>
+        <video ng-show="isRecording" style="width: 80%;" style="margin: auto;"></video>
+    </section>
+</ion-scroll>
+

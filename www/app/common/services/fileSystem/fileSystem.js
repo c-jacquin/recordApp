@@ -1,3 +1,5 @@
+'use strict';
+
 function FileService($q,$window,$http){
     return {
         urlToBlob: function(url){
@@ -6,7 +8,7 @@ function FileService($q,$window,$http){
             xhr.open('GET', url, true);
             xhr.responseType = 'blob';
             xhr.onload = function(e) {
-                if (this.status == 200 || this.status == 0 ) {
+                if (this.status === 200 || this.status === 0 ) {
                     deferred.resolve(this.response);
                 }
             };
