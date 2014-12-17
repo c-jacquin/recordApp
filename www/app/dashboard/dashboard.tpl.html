@@ -1,31 +1,36 @@
 <ion-view title="Dashboard">
     <ion-header-bar class="bar-royal">
         <div class="buttons">
-            <button class="button button-icon icon ion-ios7-minus-outline"
-                    ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button>
-            <h1 class="title">Ionic Delete/Option Buttons</h1>
+            <h1 class="title">What you've recorded</h1>
             <button class="button"
-                    ng-click="data.showDelete = false; data.showReorder = !data.showReorder">
+                    ng-click="data.showReorder = !data.showReorder">
                 Reorder
             </button>
         </div>
     </ion-header-bar>
     <ion-content>
-        <ion-list click-for-options-wrapper show-delete="data.showDelete" show-reorder="data.showReorder">
-            <ion-item click-for-options ng-repeat="record in dashboard.records">
+        <ion-list click-for-options-wrapper
+                  show-reorder="data.showReorder">
+            <ion-item class="item-icon-right" click-for-options
+                      ng-repeat="record in dashboard.records" >
                 {{ record.id }}
-                <ion-delete-button class="ion-ios7-trash-outline"
-                                   ng-click="dashboard.remove(record,$index)">
-                </ion-delete-button>
-                <ion-option-button class="button-royal"
-                                   ng-click="edit(item)">
-                    <i class="icon ion-ios7-pulse-strong"></i>
+                <ion-option-button class="button-light"
+                                   ng-click="dashboard.remove($event,record,$index)">
+                    <i class="icon ion-ios7-trash-outline assertive"></i>
                 </ion-option-button>
                 <ion-option-button class="button-light"
-                                   ng-click="share(item)">
-                    <i class="icon ion-ios7-play-outline royal"></i>
+                                   ng-click="edit(item)">
+                    <i class="icon ion-ios7-pulse-strong royal"></i>
                 </ion-option-button>
-                <ion-reorder-button class="ion-navicon" on-reorder="dashboard.moveItem(record, $fromIndex, $toIndex)"></ion-reorder-button>
+                <ion-option-button class="button-light"
+                                   play
+                                   id="record.id">
+                    <i class="icon ion-ios7-play-outline royal" ng-class="{ 'ion-ios7-play-outline': !isPlaying,'ion-ios7-pause-outline': isPlaying}"></i>
+                </ion-option-button>
+                <ion-reorder-button class="ion-navicon"
+                                    on-reorder="dashboard.moveItem(record, $fromIndex, $toIndex)">
+                </ion-reorder-button>
+                <i class="icon ion-ios7-volume-high" ng-show="isPlaying"></i>
             </ion-item>
         </ion-list>
     </ion-content>

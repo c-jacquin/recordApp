@@ -1,6 +1,6 @@
 'use strict';
 
-function Record(pouchdb,$log){
+function Record(pouchdb,FileService,$log){
     var recordsDB = pouchdb.create('Record');
         //sync = pouchdb.sync('Record', 'https://recorder.couchappy.com', {live: true});
         //
@@ -20,7 +20,6 @@ function Record(pouchdb,$log){
 
     var service = {
         save: function(record){
-            console.log(record);
             return recordsDB.put(record);
         },
         findAll: function(){
@@ -45,6 +44,11 @@ function Record(pouchdb,$log){
                 .get(record.id)
                 .then(recordsDB.remove);
             //return recordsDB.remove(record.id,record.value.rev);
+        },
+        getBase64: function(id){
+            return recordsDB
+                .getAttachment(id,'attachment')
+                .then(FileService.blobToBase64)
         }
         //sync: sync
     };
