@@ -1,6 +1,6 @@
 'use strict';
 
-function FileService($q,$window,$http){
+function FileService($q,$window,$timeout){
     return {
         urlToBlob: function(url){
             var deferred = $q.defer();
@@ -16,7 +16,6 @@ function FileService($q,$window,$http){
               deferred.reject(err);
             };
             xhr.send();
-
             return deferred.promise;
         },
         blobToBase64: function(blob){
@@ -30,6 +29,15 @@ function FileService($q,$window,$http){
                 deferred.reject(err);
             };
             return deferred.promise;
+        },
+        base64toArrayBuffer: function(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
         }
     };
 }

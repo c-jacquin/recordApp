@@ -40,52 +40,8 @@ function DashboardCtrl(Record,Toast,$ionicPopup){
                 }
             });
     };
-
-    this.moveItem = function(item, fromIndex, toIndex) {
-        Record.list.splice(fromIndex, 1);
-        Record.list.splice(toIndex, 0, item);
-    };
-
-    this.playSound = function(id){
-        Record
-            .findOne(id)
-            .then(function(){
-
-            })
-
-    }
-}
-
-function play(Record,Toast){
-    return {
-        scope: {
-            id: '='
-        },
-        require: '^ionItem',
-        link: function(scope,element,attrs,ionItemCtrl){
-            element.on('click',function(){
-                Record
-                    .getBase64(scope.id)
-                    .then(function(url){
-                        var audioElement = angular.element('<audio/>')[0];
-                        audioElement.src =url;
-                        audioElement.play();
-                        ionItemCtrl.$scope.isPlaying = true;
-                        audioElement.addEventListener('ended',function(){
-                            scope.$apply(function(){
-                                ionItemCtrl.$scope.isPlaying = false;
-                            });
-                        })
-                    })
-                    .catch(function(err){
-                        Toast.error(err.message);
-                    })
-            })
-        }
-    }
 }
 
 angular.module('app.dashboard',[])
     .config(dashboardConfig)
     .controller('DashboardController',DashboardCtrl)
-    .directive('play',play);

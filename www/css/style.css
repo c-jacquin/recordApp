@@ -84,3 +84,7 @@
 .alert-danger .alert-link {
     color: #843534;
 }
+
+.item-content{
+    padding-right: 0px!important;
+}
