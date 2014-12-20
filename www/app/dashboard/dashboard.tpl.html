@@ -7,7 +7,7 @@
             <ion-item class="item-icon-right" click-for-options
                       ng-repeat="record in dashboard.records">
                 <!--{{ record.id }}-->
-                <audio-visualizer label="record.id"></audio-visualizer>
+                <ion-audio-visu label="record.id"></ion-audio-visu>
                 <ion-option-button class="button-light"
                                    ng-click="dashboard.remove($event,record,$index)">
                     <i class="icon ion-ios7-trash-outline assertive"></i>

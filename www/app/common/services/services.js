@@ -2,6 +2,5 @@ angular.module('app.common.services',[
     'app.common.services.fileSystem',
     'app.common.services.notification',
     'app.common.services.toast',
-    'app.common.services.ionic',
-    'app.common.services.audioVisualizer'
+    'app.common.services.ionic'
 ]);

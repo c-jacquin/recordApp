@@ -1,5 +1,11 @@
 'use strict';
 
+navigator.getUserMedia = ( navigator.getUserMedia ||
+navigator.webkitGetUserMedia ||
+navigator.mozGetUserMedia ||
+navigator.msGetUserMedia);
+
+
 function recordConfig($stateProvider){
     $stateProvider
         .state('app.record',{
@@ -14,7 +20,23 @@ function recordConfig($stateProvider){
 }
 
 function RecordCtrl($scope,$ionicModal,Toast,FileService,Recorder,Record){
+
     $scope.recordSuccess = function(url){
+        $scope.video = Recorder.isVideo();
+        if('WebkitAppearance' in document.documentElement.style){
+            console.log(url);
+            if($scope.video){
+                $scope.videoTrack = url.video;
+                $scope.audioTrack = url.audio;
+            }else{
+                $scope.url = url;
+            }
+        }else{
+            $scope.url = url;
+        }
+
+
+
         $scope.cancel = function(){
             $scope.modal.hide();
         };
