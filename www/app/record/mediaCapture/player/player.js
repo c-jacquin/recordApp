@@ -1,18 +1,20 @@
 'use strict';
 
 function mediaPlayer($window,AudioPlayer,VideoPlayer){
+    $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
     return {
         restrict: 'EA',
         templateUrl: 'app/record/mediaCapture/player/player.tpl.html',
         scope: {
-            url: '=',
             videoTrack: '=',
             audioTrack: '=',
             isVideo: '='
         },
         replace: true,
         link:function(scope,element,attrs){
-            var audioCtx = new ($window.AudioContext || $window.webkitAudioContext)(),
+            console.log(scope);
+
+            var audioCtx = new $window.AudioContext(),
                 canvas  = element[0].querySelector('canvas'),
                 canvasCtx = canvas.getContext('2d'),
                 video,
@@ -20,53 +22,39 @@ function mediaPlayer($window,AudioPlayer,VideoPlayer){
 
             scope.play =  function(){
                 var audioEnded = function(){
-                    console.log('ended')
+                    console.log('ended');
                 };
                 var audioPlayerOptions = {
                     width: element[0].clientWidth
                 };
-                var url;
-
-                console.log('video',scope.isVideo)
+                var audioUrl;
+                if('WebkitAppearance' in document.documentElement.style){
+                    audioUrl = scope.audioTrack.replace('data:audio/wav;base64,','');
+                }else{
+                    audioUrl = scope.audioTrack.replace('data:video/webm;base64,','');
+                }
                 if(scope.isVideo){
                     video = element[0].querySelector('video');
                     canvas.height = video.clientHeight;
                     canvas.width = video.clientWidth;
                     video.control = false;
                     video.muted = true;
-                    if('WebkitAppearance' in document.documentElement.style){
-                        console.log(scope
-                        )
-                        url = scope.audioTrack.replace('data:audio/wav;base64,','');
-                        console.log('Webkiyt',url)
-                        AudioPlayer
-                            .play(audioCtx,url)
-                            .then(function(source){
-                                console.log('audio plya ???')
-                                video.src = scope.videoTrack;
-                                VideoPlayer.start(video,canvasCtx);
-                                source.addEventListener('ended',audioEnded)
-                            })
-                    }else{
-                        //url = scope.url.replace('data:video/webm;base64,','');
-                        video.src = scope.url;
-                        VideoPlayer.start(video,canvasCtx);
-                    }
+                    AudioPlayer
+                        .play(audioCtx,audioUrl)
+                        .then(function(source){
+                            video.src = scope.videoTrack;
+                            VideoPlayer.start(video,canvasCtx);
+                            source.addEventListener('ended',audioEnded);
+                        });
                     video.addEventListener('loadedmetadata', function() {
                         isStreaming = true;
                     }, false);
                 }else{
-                    'WebkitAppearance' in document.documentElement.style ?
-                        url = scope.url.replace('data:audio/wav;base64,','') :
-                        url = scope.url.replace('data:audio/ogg;base64,','');
-
-
-
                     AudioPlayer
-                        .play(audioCtx,url,canvasCtx,audioPlayerOptions)
+                        .play(audioCtx,audioUrl,canvasCtx,audioPlayerOptions)
                         .then(function(source){
-                            source.addEventListener('ended',audioEnded)
-                        })
+                            source.addEventListener('ended',audioEnded);
+                        });
                 }
             };
 
@@ -97,5 +85,4 @@ angular.module('app.record.mediaCapture.player',[
     'app.record.mediaCapture.player.videoPlayer',
     'app.record.mediaCapture.player.audioPlayer'
 ])
-    .directive('mediaPlayer',mediaPlayer)
-    .factory('AudioVisualizer',AudioVisualizer);
+    .directive('mediaPlayer',mediaPlayer);

@@ -26,7 +26,7 @@ function Notif($timeout,$window){
                         }, duration * 1000);
                     }
                 }
-            })
+            });
         }
     };
 }

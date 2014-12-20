@@ -65,7 +65,7 @@ function AudioVisualizer($window){
                 requestId = undefined;
             }
         }
-    }
+    };
 }
 
 angular.module('app.record.mediaCapture.player.audioVisualizer',[])

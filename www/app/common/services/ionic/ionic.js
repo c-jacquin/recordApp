@@ -119,7 +119,7 @@ function ionAudioVisu($window,FileService,$q){
                 height = element.parent()[0].clientHeight,
                 width = element.parent()[0].clientWidth-32,
                 canvasCtx = canvas.getContext('2d'),
-                audioCtx = new ($window.AudioContext || $window.webkitAudioContext)();
+                audioCtx = new $window.AudioContext();
 
 
 
@@ -146,7 +146,7 @@ function ionAudioVisu($window,FileService,$q){
                         source.start(0);
 
                         source.addEventListener('ended',function(){
-                            console.log('ended')
+                            console.log('ended');
                             canvasCtx.clearRect ( 0 , 0 , canvas.width, canvas.height );
                             canvasCtx.fillText(scope.label,0,30);
 
@@ -208,9 +208,9 @@ function ionAudioVisu($window,FileService,$q){
                 }
             }
 
-            ionItemCtrl.$scope.$watch('audioUrl',play)
+            ionItemCtrl.$scope.$watch('audioUrl',play);
         }
-    }
+    };
 
 }
 
@@ -240,10 +240,10 @@ function play(Record,Toast){
                     })
                     .catch(function(err){
                         Toast.error(err.message);
-                    })
-            })
+                    });
+            });
         }
-    }
+    };
 }
 
 angular.module('app.common.services.ionic',[

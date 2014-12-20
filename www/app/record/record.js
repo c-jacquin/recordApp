@@ -19,34 +19,26 @@ function recordConfig($stateProvider){
         });
 }
 
-function RecordCtrl($scope,$ionicModal,Toast,FileService,Recorder,Record){
+function RecordCtrl($scope,$ionicModal,Toast,Record,$window){
 
-    $scope.recordSuccess = function(url){
-        $scope.video = Recorder.isVideo();
-        if('WebkitAppearance' in document.documentElement.style){
-            console.log(url);
-            if($scope.video){
-                $scope.videoTrack = url.video;
-                $scope.audioTrack = url.audio;
-            }else{
-                $scope.url = url;
-            }
-        }else{
-            $scope.url = url;
-        }
+    $window.navigator.getUserMedia({audio:true,video:true},function(stream) {
+        $scope.$apply(function(){
+            $scope.stream = stream;
+        });
+    },function(err){
+        console.log(err);
+    });
 
-
-
+    $scope.recordSuccess = function(record){
+        $scope.isVideo = record.isVideo;
+        $scope.audioTrack = record.audioUrl;
+        $scope.videoTrack = record.videoUrl;
         $scope.cancel = function(){
             $scope.modal.hide();
         };
 
-        $scope.save = function(record){
-            Recorder.meta = record;
-            FileService
-                .urlToBlob(url)
-                .then(FileService.blobToBase64)
-                .then(Recorder.buildData)
+        $scope.save = function(meta){
+            Record.buildData(meta,record)
                 .then(Record.save)
                 .then(function(){
                     $scope.modal.hide();

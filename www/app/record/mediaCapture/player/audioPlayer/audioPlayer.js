@@ -29,7 +29,7 @@ function AudioPlayer($q,FileService,AudioVisualizer){
             });
             return deferred.promise;
         }
-    }
+    };
 }
 
 

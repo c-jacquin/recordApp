@@ -1,6 +1,6 @@
 'use strict';
 
-function Record(pouchdb,FileService,$log,Recorder){
+function Record(pouchdb,FileService,$log,Recorder,$q,$timeout){
     var recordsDB = pouchdb.create('Record'),
         meta,
         list,
@@ -51,9 +51,9 @@ function Record(pouchdb,FileService,$log,Recorder){
         getBase64: function(id){
             return recordsDB
                 .getAttachment(id,'attachment')
-                .then(FileService.blobToBase64)
+                .then(FileService.blobToBase64);
         },
-        buildData: function(base64){
+        buildData: function(meta,base64){
             var deferred = $q.defer(),
                 isVideo = Recorder.isVideo();
             if(angular.isObject(meta)){
@@ -70,7 +70,7 @@ function Record(pouchdb,FileService,$log,Recorder){
                     }));
                 });
             }else{
-                throw new Error('meta is undefined')
+                throw new Error('meta is undefined');
             }
             return deferred.promise;
         },

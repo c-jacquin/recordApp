@@ -35,19 +35,19 @@ function ImageVisualizer($window){
     function draw() {
         requestId = $window.requestAnimationFrame(draw);
         canvasContext.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, canvasContext.canvas.width, canvasContext.canvas.height);
-        var pixels = canvasContext.getImageData(0, 0, canvasContext.canvas.width, canvasContext.canvas.height),
-            i = 0,
-            brightness;
-
-        for (; i < pixels.data.length; i += 4) {
-            // brightness code from Tab Atkins' canvas demos
-            brightness = ((3*pixels.data[i]+4*pixels.data[i+1]+pixels.data[i+2])>>>3) / 256;
-
-            pixels.data[i] = ((tr * brightness)+0.5)>>0;
-            pixels.data[i+1] = ((tg * brightness)+0.5)>>0
-            pixels.data[i+2] = ((tb * brightness)+0.5)>>0
-        }
-        canvasContext.putImageData(pixels, 0, 0);
+        //var pixels = canvasContext.getImageData(0, 0, canvasContext.canvas.width, canvasContext.canvas.height),
+        //    i = 0,
+        //    brightness;
+        //
+        //for (; i < pixels.data.length; i += 4) {
+        //    // brightness code from Tab Atkins' canvas demos
+        //    brightness = ((3*pixels.data[i]+4*pixels.data[i+1]+pixels.data[i+2])>>>3) / 256;
+        //
+        //    pixels.data[i] = ((tr * brightness)+0.5)>>0;
+        //    pixels.data[i+1] = ((tg * brightness)+0.5)>>0
+        //    pixels.data[i+2] = ((tb * brightness)+0.5)>>0
+        //}
+        //canvasContext.putImageData(pixels, 0, 0);
     }
 
     return{
@@ -66,7 +66,7 @@ function ImageVisualizer($window){
                 requestId = undefined;
             }
         }
-    }
+    };
 
 }
 

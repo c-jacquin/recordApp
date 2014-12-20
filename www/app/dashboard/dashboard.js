@@ -44,4 +44,4 @@ function DashboardCtrl(Record,Toast,$ionicPopup){
 
 angular.module('app.dashboard',[])
     .config(dashboardConfig)
-    .controller('DashboardController',DashboardCtrl)
+    .controller('DashboardController',DashboardCtrl);
