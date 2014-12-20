@@ -35,8 +35,6 @@ function mediaPlayer($window,AudioPlayer,VideoPlayer){
                 }
                 if(scope.isVideo){
                     video = element[0].querySelector('video');
-                    canvas.height = video.clientHeight;
-                    canvas.width = video.clientWidth;
                     video.control = false;
                     video.muted = true;
                     AudioPlayer
@@ -46,9 +44,6 @@ function mediaPlayer($window,AudioPlayer,VideoPlayer){
                             VideoPlayer.start(video,canvasCtx);
                             source.addEventListener('ended',audioEnded);
                         });
-                    video.addEventListener('loadedmetadata', function() {
-                        isStreaming = true;
-                    }, false);
                 }else{
                     AudioPlayer
                         .play(audioCtx,audioUrl,canvasCtx,audioPlayerOptions)

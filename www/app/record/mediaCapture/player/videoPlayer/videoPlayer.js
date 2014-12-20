@@ -27,7 +27,6 @@ function ImageVisualizer($window){
     var requestId,
         canvasContext,
         video,
-        isStreaming,
         tr = 255,
         tg = 0,
         tb = 0;
@@ -54,8 +53,12 @@ function ImageVisualizer($window){
         start: function(videoElement,context){
             canvasContext = context;
             video = videoElement;
-            video.play();
             draw();
+            video.addEventListener('loadedmetadata', function() {
+                context.canvas.height = this.videoHeight;
+                context.canvas.width = this.videoWidth;
+                video.play();
+            }, false);
         },
         changeColor: function(){
 

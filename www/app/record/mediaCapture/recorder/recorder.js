@@ -1,6 +1,6 @@
 'use strict';
 
-function Recorder($q,$window,$timeout){
+function Recorder($q,$window){
 
     var record,
         type,

@@ -53,20 +53,50 @@ function Record(pouchdb,FileService,$log,Recorder,$q,$timeout){
                 .getAttachment(id,'attachment')
                 .then(FileService.blobToBase64);
         },
-        buildData: function(meta,base64){
+        buildData: function(meta,record){
             var deferred = $q.defer(),
-                isVideo = Recorder.isVideo();
+                isVideo = Recorder.isVideo(),
+                attachments;
+            console.log(meta, record
+            );
             if(angular.isObject(meta)){
-                $timeout(function(){
-                    meta.type = isVideo ? 'video' : 'audio';
-                    deferred.resolve(angular.extend(meta, {
-                        'type': meta.type,
-                        '_attachments': {
-                            'attachment': {
-                                'content_type': isVideo ? 'video/webm':'audio/ogg',
-                                'data': isVideo ? base64.replace('data:video/webm;base64,','') : base64.replace('data:audio/ogg;base64,','')
+                if(isVideo){
+                    meta.type = 'video/webm';
+                    attachments = {
+                        'video': {
+                            'content_type': meta.type,
+                            'data': record.videoUrl.replace('data:video/webm;base64,', '')
+                        }
+                    };
+                    if('WebkitAppearance' in document.documentElement.style){
+                        meta.type = 'audio/wav';
+                        attachments['audio'] = {
+                            'content_type': meta.type,
+                            'data': record.audioUrl.replace('data:audio/wav;base64,','')
+                        }
+                    }
+                }else{
+                    if('WebkitAppearance' in document.documentElement.style) {
+                        meta.type = 'audio/wav';
+                        attachments = {
+                            'audio': {
+                                'content_type': meta.type,
+                                'data': record.audioUrl.replace('data:audio/wav;base64,', '')
                             }
                         }
+                    }else{
+                        meta.type = 'video/webm';
+                        attachments = {
+                            'audio': {
+                                'content_type': meta.type,
+                                'data': record.audioUrl.replace('data:video/webm;base64,', '')
+                            }
+                        }
+                    }
+                }
+                $timeout(function(){
+                    deferred.resolve(angular.extend(meta, {
+                        '_attachments': attachments
                     }));
                 });
             }else{

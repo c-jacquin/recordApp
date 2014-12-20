@@ -1,0 +1,13 @@
+collapse-card{
+  section{
+    height: 0px;
+    overflow: hidden;
+    transition: all 0.5s linear;
+  }
+}
+
+collapse-card{
+  section.open{
+    height:450px;
+  }
+}
