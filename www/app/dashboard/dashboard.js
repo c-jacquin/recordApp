@@ -19,7 +19,7 @@ function dashboardConfig($stateProvider){
 }
 
 function DashboardCtrl(Record,Toast,$ionicPopup){
-    this.records = Record.list;
+    this.records = Record.list();
     this.remove = function(event,record,index){
         $ionicPopup
             .confirm({

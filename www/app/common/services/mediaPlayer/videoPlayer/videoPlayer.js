@@ -73,6 +73,36 @@ function ImageVisualizer($window){
 
 }
 
+function videoPlayer(){
+    return{
+        restrict: 'EA',
+        templateUrl: 'app/common/services/mediaPlayer/videoPlayer/videoPlayer.js',
+        require: '^mediaPlayer',
+        replace: true,
+        link: function(scope,element,attrs,mediaPlayerCtrl){
+            scope.videoElement = element[0].querySelector('video');
+            scope.videoElement.control = false;
+            scope.videoElement.muted = true;
+            var audioEnded = function(){
+                console.log('ended');
+                mediaPlayerCtrl.$scope.isPlaying = false;
+            };
 
-angular.module('app.record.mediaCapture.player.videoPlayer',[])
+            mediaPlayerCtrl
+                .$scope
+                .$watch('isPlaying',function(){
+                    AudioPlayer
+                        .play(mediaPlayerCtrl.$scope.audioUrl)
+                        .then(function(source){
+                            scope.videoElement.src = scope.26videoTrack;
+                            VideoPlayer.start(video);
+                            source.addEventListener('ended',audioEnded);
+                        });
+                })
+        }
+    }
+}
+
+
+angular.module('app.common.services.mediaPlayer.videoPlayer',[])
     .service('VideoPlayer',ImageVisualizer);

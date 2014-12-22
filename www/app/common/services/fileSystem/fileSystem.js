@@ -1,6 +1,6 @@
 'use strict';
 
-function FileService($q,$window,$timeout){
+function FileService($q,$window){
     return {
         urlToBlob: function(url){
             var deferred = $q.defer();

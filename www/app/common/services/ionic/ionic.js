@@ -105,7 +105,7 @@ function clickForOptions($ionicGesture){
     };
 }
 
-function ionAudioVisu($window,FileService,$q){
+function ionAudioVisu($window,FileService,AudioVisualizer){
     return {
         restrict: 'EA',
         template:'<canvas  height="50"></canvas>',
@@ -116,7 +116,7 @@ function ionAudioVisu($window,FileService,$q){
         link: function(scope,element,attrs,ionItemCtrl){
 
             var canvas = element[0].querySelector('canvas'),
-                height = element.parent()[0].clientHeight,
+                height = element.parent()[0].clientHeight-10,
                 width = element.parent()[0].clientWidth-32,
                 canvasCtx = canvas.getContext('2d'),
                 audioCtx = new $window.AudioContext();
@@ -127,10 +127,21 @@ function ionAudioVisu($window,FileService,$q){
 
 
             function play(url){
+                console.log(url)
+                if('WebkitAppearance' in document.documentElement.style){
+                    url = url.replace('data:audio/wav;base64,','');
+                }else{
+                    url = url.replace('data:video/webm;base64,','');
+                }
+
                 if(url){
                     canvas.width = width;
                     canvas.height = height;
-                    audioCtx.decodeAudioData(FileService.base64toArrayBuffer(url.replace('data:audio/ogg;base64,','')),function(buffer){
+
+                    AudioVisualizer.init();
+                    AudioVisualizer.start();
+
+                    audioCtx.decodeAudioData(FileService.base64toArrayBuffer(url),function(buffer){
 
                         var analyser = audioCtx.createAnalyser();
                         analyser.fftSize = 2048;
@@ -225,7 +236,7 @@ function play(Record,Toast){
         link: function(scope,element,attrs,ionItemCtrl){
             element.on('click',function(){
                 Record
-                    .getBase64(scope.id)
+                    .getAudio(scope.id)
                     .then(function(url){
                         //var audioElement = angular.element('<audio/>')[0];
                         //audioElement.src =url;

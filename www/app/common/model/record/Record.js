@@ -48,9 +48,14 @@ function Record(pouchdb,FileService,$log,Recorder,$q,$timeout){
                 .then(recordsDB.remove);
             //return recordsDB.remove(record.id,record.value.rev);
         },
-        getBase64: function(id){
+        getAudio: function(id){
             return recordsDB
-                .getAttachment(id,'attachment')
+                .getAttachment(id,'audio')
+                .then(FileService.blobToBase64);
+        },
+        getVideo: function(id){
+            return recordsDB
+                .getAttachment(id,'video')
                 .then(FileService.blobToBase64);
         },
         buildData: function(meta,record){
@@ -70,10 +75,10 @@ function Record(pouchdb,FileService,$log,Recorder,$q,$timeout){
                     };
                     if('WebkitAppearance' in document.documentElement.style){
                         meta.type = 'audio/wav';
-                        attachments['audio'] = {
+                        attachments.audio = {
                             'content_type': meta.type,
                             'data': record.audioUrl.replace('data:audio/wav;base64,','')
-                        }
+                        };
                     }
                 }else{
                     if('WebkitAppearance' in document.documentElement.style) {
@@ -83,7 +88,7 @@ function Record(pouchdb,FileService,$log,Recorder,$q,$timeout){
                                 'content_type': meta.type,
                                 'data': record.audioUrl.replace('data:audio/wav;base64,', '')
                             }
-                        }
+                        };
                     }else{
                         meta.type = 'video/webm';
                         attachments = {
@@ -91,7 +96,7 @@ function Record(pouchdb,FileService,$log,Recorder,$q,$timeout){
                                 'content_type': meta.type,
                                 'data': record.audioUrl.replace('data:video/webm;base64,', '')
                             }
-                        }
+                        };
                     }
                 }
                 $timeout(function(){

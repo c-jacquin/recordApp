@@ -95,7 +95,7 @@ function Recorder($q,$window){
 function recorder(Recorder){
     return {
         restrict: 'E',
-        templateUrl: 'app/record/mediaCapture/recorder/recorder.tpl.html',
+        templateUrl: 'app/common/services/recorder/recorder.tpl.html',
         scope: {
             onrecorded: '=',
             onerror: '=',
@@ -149,7 +149,7 @@ function downloadBlob(Recorder){
     };
 }
 
-angular.module('app.record.mediaCapture.recorder',[])
+angular.module('app.common.services.recorder',[])
     .factory('Recorder',Recorder)
     .directive('recorder',recorder)
     .directive('downloadBlob',downloadBlob);

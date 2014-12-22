@@ -68,5 +68,8 @@ function AudioVisualizer($window){
     };
 }
 
-angular.module('app.record.mediaCapture.player.audioVisualizer',[])
+
+
+angular.module('app.common.services.mediaPlayer.audioPlayer')
     .service('AudioVisualizer',AudioVisualizer);
+

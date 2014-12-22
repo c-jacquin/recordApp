@@ -1,7 +1,9 @@
 angular.module('app.common.services',[
+    'app.common.services.mediaPlayer',
     'app.common.services.fileSystem',
     'app.common.services.notification',
     'app.common.services.toast',
     'app.common.services.ionic',
-    'app.common.services.collapse'
+    'app.common.services.collapse',
+    'app.common.services.recorder'
 ]);

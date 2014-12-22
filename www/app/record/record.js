@@ -69,8 +69,6 @@ function RecordCtrl($scope,$ionicModal,Toast,Record,$window){
     };
 }
 
-angular.module('app.record',[
-    'app.record.mediaCapture'
-])
+angular.module('app.record',[])
     .config(recordConfig)
     .controller('RecordController',RecordCtrl);
