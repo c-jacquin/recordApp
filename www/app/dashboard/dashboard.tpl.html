@@ -5,9 +5,11 @@
     <ion-content>
         <ion-list click-for-options-wrapper>
             <ion-item class="item-icon-right" click-for-options
-                      ng-repeat="record in dashboard.records">
-                <!--{{ record.id }}-->
-                <ion-audio-visu label="record.id"></ion-audio-visu>
+                      ng-repeat="record in dashboard.records" media-player audio-track="record.audioUrl" video-track="record.videoUrl">
+                <span>{{ record.id }}</span>
+                <audio-player name="{{ record.id }}">
+                    <visualizer options="dashboard.visualizerOptions"></visualizer>
+                </audio-player>
                 <ion-option-button class="button-light"
                                    ng-click="dashboard.remove($event,record,$index)">
                     <i class="icon ion-ios7-trash-outline assertive"></i>
@@ -17,9 +19,10 @@
                     <i class="icon ion-ios7-pulse-strong royal"></i>
                 </ion-option-button>
                 <ion-option-button class="button-light"
+                                   id="record.id"
                                    play
-                                   id="record.id">
-                    <i class="icon ion-ios7-play-outline royal" ng-class="{ 'ion-ios7-play-outline': !isPlaying,'ion-ios7-pause-outline': isPlaying}"></i>
+                                   options="dashboard.playOptions">
+                    <i class="icon royal"></i>
                 </ion-option-button>
 
                 <!--<i class="icon ion-ios7-volume-high" ng-show="isPlaying"></i>-->

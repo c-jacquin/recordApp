@@ -2,39 +2,24 @@
 
 
 function MediaPlayerCtrl($scope,$element) {
-    if('WebkitAppearance' in document.documentElement.style){
-        $scope.audioUrl = $scope.audioTrack.replace('data:audio/wav;base64,','');
-    }else{
-        $scope.audioUrl = $scope.audioTrack.replace('data:video/webm;base64,','');
-    }
+    $scope.isPlaying = false;
+
     this.$scope = $scope;
     this.$element = $element;
 }
 
-function mediaPlayer($window,AudioPlayer,VideoPlayer){
+function mediaPlayer($window){
     $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
     return {
         restrict: 'EA',
         templateUrl: 'app/common/services/mediaPlayer/mediaPlayer.tpl.html',
         scope: {
             videoTrack: '=',
-            audioTrack: '=',
-            showAudioVisu:'='
+            audioTrack: '='
         },
         transclude: true,
         replace: true,
-        controller: 'MediaPlayerController',
-        link:function(scope,element,attrs){
-
-            scope.play =  function(){
-                scope.isPlaying = true;
-            };
-
-            scope.back = function(){
-                //todo make it work 0o
-            };
-
-        }
+        controller: 'MediaPlayerController'
     };
 }
 
@@ -42,7 +27,6 @@ function mediaPlayer($window,AudioPlayer,VideoPlayer){
 angular.module('app.common.services.mediaPlayer',[
     'app.common.services.mediaPlayer.videoPlayer',
     'app.common.services.mediaPlayer.audioPlayer'
-    //'app.common.services.mediaPlayer.audioVisualizer'
 ])
     .controller('MediaPlayerController',MediaPlayerCtrl)
     .directive('mediaPlayer',mediaPlayer);

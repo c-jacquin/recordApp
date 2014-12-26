@@ -73,11 +73,14 @@ function ImageVisualizer($window){
 
 }
 
-function videoPlayer(){
+function videoPlayer(AudioPlayer,VideoPlayer){
     return{
         restrict: 'EA',
-        templateUrl: 'app/common/services/mediaPlayer/videoPlayer/videoPlayer.js',
+        templateUrl: 'app/common/services/mediaPlayer/videoPlayer/videoPlayer.tpl.html',
         require: '^mediaPlayer',
+        scope:{
+
+        },
         replace: true,
         link: function(scope,element,attrs,mediaPlayerCtrl){
             scope.videoElement = element[0].querySelector('video');
@@ -94,13 +97,13 @@ function videoPlayer(){
                     AudioPlayer
                         .play(mediaPlayerCtrl.$scope.audioUrl)
                         .then(function(source){
-                            scope.videoElement.src = scope.26videoTrack;
-                            VideoPlayer.start(video);
+                            scope.videoElement.src = scope.videoTrack;
+                            VideoPlayer.start(scope.videoElement);
                             source.addEventListener('ended',audioEnded);
                         });
-                })
+                });
         }
-    }
+    };
 }
 
 

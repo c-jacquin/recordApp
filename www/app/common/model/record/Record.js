@@ -1,6 +1,6 @@
 'use strict';
 
-function Record(pouchdb,FileService,$log,Recorder,$q,$timeout){
+function Record(pouchdb,FileService,$log,Recorder,$q,$timeout,$rootScope){
     var recordsDB = pouchdb.create('Record'),
         meta,
         list,
@@ -25,12 +25,42 @@ function Record(pouchdb,FileService,$log,Recorder,$q,$timeout){
         save: function(record){
             return recordsDB.put(record);
         },
-        findAll: function(){
-            return recordsDB
-                .allDocs()
-                .then(function(records){
-                    list = records.rows;
+        findAll: function(skip){
+            var deferred = $q.defer();
+            recordsDB
+                .allDocs({
+                    include_docs: true,
+                    attachments: true,
+                    limit:20,
+                    skip:skip
+                })
+                .then(function(data){
+                    console.log(data.rows)
+                    deferred.resolve(data.rows)
+                })
+                .catch(function(err){
+                    deferred.reject(err);
                 });
+            return deferred.promise;
+        },
+        populate: function(records){
+            var self = this;
+            var deferred = $q.defer();
+            records.forEach(function(v,k){
+                recordsDB
+                    .getAttachment(v.id,'audio')
+                    .then(FileService.blobToBase64)
+                    .then(function(base64){
+                        records[k].audioUrl = base64.replace('data:audio/wav;base64,','');
+                        records[k].audioUrl = records[k].audioUrl.replace('data:video/webm;base64,','');
+                        if(k+1 === records.length){
+                            list = records;
+                            deferred.resolve(records);
+                        }
+                    })
+
+            });
+            return deferred.promise;
         },
         findOne: function(id){
             return recordsDB

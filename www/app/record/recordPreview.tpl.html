@@ -12,8 +12,12 @@
         <label class="item item-input">
             <textarea placeholder="Description" ng-model="record.description" rows="5"></textarea>
         </label>
-        <media-player url="url" audio-track="audioTrack" video-track="videoTrack" is-video="isVideo" >
-            <audio-player></audio-player>
+        <media-player audio-track="audioTrack" video-track="videoTrack">
+            <a class="button button-icon icon" play options="playOptions"></a>
+            <audio-player name="preview">
+                <visualizer options="visualizerOptions"></visualizer>
+            </audio-player>
+            <video-player ng-if="videoTrack"></video-player>
         </media-player>
     </ion-content>
 </ion-modal-view>

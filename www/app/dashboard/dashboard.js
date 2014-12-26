@@ -12,14 +12,34 @@ function dashboardConfig($stateProvider){
             },
             resolve: {
                 records: function(Record){
-                    return Record.findAll();
+                     return Record.findAll(0)
+
                 }
             }
         });
 }
 
-function DashboardCtrl(Record,Toast,$ionicPopup){
-    this.records = Record.list();
+function DashboardCtrl(Record,Toast,$ionicPopup,records){
+    var self = this;
+    Record
+        .populate(records)
+        .then(function(){
+            self.records = records;
+        });
+
+    this.visualizerOptions = {
+        backgroundColor: 'white',
+        curveColor: 'black',
+        type:'curve',
+        height: '50'
+    };
+
+    this.playOptions = {
+        playingClass: 'ion-ios7-play-outline',
+        pauseClass: 'ion-ios7-pause-outline'
+    };
+
+
     this.remove = function(event,record,index){
         $ionicPopup
             .confirm({

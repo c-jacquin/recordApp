@@ -1,12 +1,12 @@
 'use strict';
 
-function volume(){
+function volume(AudioPlayer){
     return {
         restrict: 'EA',
         templateUrl:'app/common/services/mediaPlayer/controls/volume/volume.tpl.html',
         require: 'ngModel',
         replace: true,
-        link: function(scope,element,attrs){
+        link: function(scope,element,attrs,ngModel){
 
             scope.toggleSound = function(){
                 angular.element(element[0].querySelector('.range')).toggleClass('sound-visible');
@@ -21,7 +21,7 @@ function volume(){
             };
 
         }
-    }
+    };
 }
 
 angular.module('app.common.services.mediaPlayer')

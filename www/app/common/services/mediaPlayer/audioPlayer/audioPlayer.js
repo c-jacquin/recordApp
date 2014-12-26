@@ -1,8 +1,8 @@
 'use strict';
 
-function AudioPlayer($q,$window,AudioVisualizer){
+function AudioPlayer($q){
 
-    var audioContext;
+    var audioContext = {};
 
      function base64toArrayBuffer(base64) {
         var binaryString = window.atob(base64);
@@ -15,65 +15,91 @@ function AudioPlayer($q,$window,AudioVisualizer){
     }
 
     return{
-        play: function(url,options,canvasContext){
+        sources: {},
+        play: function(id){
+            this.sources[id].start(0);
+        },
+        getContext: function(id){
+            return audioContext[id];
+        },
+        addContext: function(id,context,dataUrl){
+            audioContext[id] = context;
             var deferred = $q.defer();
-            audioContext = new $window.AudioContext();
-            audioContext.decodeAudioData(base64toArrayBuffer(url),function(buffer) {
-                var source = audioContext.createBufferSource();
-                source.buffer = buffer;
-                if(canvasContext){
-                    var analyser = audioContext.createAnalyser();
-                    source.connect(analyser);
-                    AudioVisualizer.init(analyser,canvasContext, options);
-                    AudioVisualizer.start();
-                }
-                source.connect(audioContext.destination);
-                source.start(0);
-                deferred.resolve(source);
+            var self = this;
+            //var url = dataUrl.replace('data:audio/wav;base64,','') || dataUrl.replace('data:video/webm;base64,','') || dataUrl.replace('data:audio/ogg;base64,','');
+            audioContext[id].decodeAudioData(base64toArrayBuffer(dataUrl),function(buffer) {
+                self.sources[id] = audioContext[id].createBufferSource();
+                self.sources[id].buffer = buffer;
+                self.sources[id].connect(audioContext[id].destination);
+                deferred.resolve(self.sources[id]);
             },function(err){
                 deferred.reject(err);
             });
             return deferred.promise;
         },
-        getContext: function(){
-            return audioContext;
+        stop: function(id){
+            this.sources[id].pause();
+        },
+        pause: function(id){
+            this.sources[id].pause();
         }
     };
 }
 
-function audioPlayer(AudioPlayer){
+function AudioPlayerCtrl($scope,$element){
+    this.$scope = $scope;
+    this.$element = $element;
+}
+
+function audioPlayer(AudioPlayer,$window){
 
     return {
         restrict: 'EA',
         templateUrl: 'app/common/services/mediaPlayer/audioPlayer/audioPlayer.tpl.html',
-        //replace: true,
         require: '^mediaPlayer',
+        scope:{
+            name: '@'
+        },
         replace: true,
+        transclude:true,
+        controller: 'AudioPlayerController',
         link: function(scope,element,attrs,mediaPlayerCtrl){
-            var canvasCtx = element[0].querySelector('canvas').getContext('2d');
-            var audioEnded = function(){
-                console.log('ended');
-                mediaPlayerCtrl.$scope.isPlaying = false;
+            var audioEnded = function(e){
+                scope.$apply(function(){
+                    mediaPlayerCtrl.$scope.isPlaying = false;
+                    scope.$emit('audioEnded');
+                    AudioPlayer
+                        .addContext(scope.name,new $window.AudioContext(),mediaPlayerCtrl.$scope.audioTrack)
+                        .then(function(source){
+                            source.onended = audioEnded;
+                        });
+                });
             };
             mediaPlayerCtrl
                 .$scope
+                .$watch('audioTrack',function(){
+                    if(mediaPlayerCtrl.$scope.audioTrack){
+                        AudioPlayer
+                            .addContext(scope.name,new $window.AudioContext(),mediaPlayerCtrl.$scope.audioTrack)
+                            .then(function(source){
+                                source.onended = audioEnded;
+                            });
+                    }
+                });
+
+
+            mediaPlayerCtrl
+                .$scope
                 .$watch('isPlaying',function(){
-                    var options = {
-                        height: element.parent()[0].clientHeight,
-                        width: element.parent()[0].clientWidth
-                    };
-                    AudioPlayer
-                        .play(mediaPlayerCtrl.$scope.audioUrl,options,canvasCtx)
-                        .then(function(source){
-                            source.addEventListener('ended',audioEnded);
-                        });
-                })
+                    if(mediaPlayerCtrl.$scope.isPlaying){
+                        AudioPlayer.play(scope.name);
+                    }
+                });
         }
-    }
+    };
 }
 
-
-
 angular.module('app.common.services.mediaPlayer.audioPlayer',[])
-    .service('AudioPlayer',AudioPlayer)
+    .factory('AudioPlayer',AudioPlayer)
+    .controller('AudioPlayerController',AudioPlayerCtrl)
     .directive('audioPlayer',audioPlayer);

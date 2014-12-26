@@ -21,6 +21,17 @@ function recordConfig($stateProvider){
 
 function RecordCtrl($scope,$ionicModal,Toast,Record,$window){
 
+    $scope.visualizerOptions = {
+        backgroundColor: 'white',
+        curveColor: 'black',
+        type:'bar'
+    };
+
+    $scope.playOptions = {
+        playingClass: 'ion-play',
+        pauseClass: 'ion-pause'
+    };
+
     $window.navigator.getUserMedia({audio:true,video:true},function(stream) {
         $scope.$apply(function(){
             $scope.stream = stream;
@@ -31,7 +42,9 @@ function RecordCtrl($scope,$ionicModal,Toast,Record,$window){
 
     $scope.recordSuccess = function(record){
         $scope.isVideo = record.isVideo;
-        $scope.audioTrack = record.audioUrl;
+        $scope.audioTrack = record.audioUrl.replace('data:audio/wav;base64,','');
+        $scope.audioTrack = $scope.audioTrack.replace('data:video/webm;base64,','')
+            console.log($scope.audioTrack);
         $scope.videoTrack = record.videoUrl;
         $scope.cancel = function(){
             $scope.modal.hide();
